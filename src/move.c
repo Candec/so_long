@@ -6,7 +6,7 @@
 /*   By: jibanez- <jibanez-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 18:56:55 by jibanez-          #+#    #+#             */
-/*   Updated: 2021/10/18 18:00:10 by jibanez-         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:38:06 by jibanez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@ void	move_up(t_mlx *data)
 {
 	t_coord	coord;
 
-	if (move_is_valid(data, data->map.p_x, data->map.p_y - 1) != -1)
+	if (move_is_valid(data, data->map.p_x, data->map.p_y - 1) != ERROR)
 	{
 		if (data->map.content[data->map.p_y - 1][data->map.p_x] == 'C')
 			data->map.collected += 1;
+		if (data->map.content[data->map.p_y - 1][data->map.p_x] == 'E' &&
+			data->map.collected == data->map.collectable)
+			data->map.player_escape = TRUE;
 		previous_tile_space(data, &coord);
 		data->map.content[data->map.p_y - 1][data->map.p_x] = 'P';
 		calc_coord(data->map.p_x, data->map.p_y - 1, &coord);
@@ -38,10 +41,13 @@ void	move_down(t_mlx *data)
 {
 	t_coord	coord;
 
-	if (move_is_valid(data, data->map.p_x, data->map.p_y + 1) != -1)
+	if (move_is_valid(data, data->map.p_x, data->map.p_y + 1) != ERROR)
 	{
 		if (data->map.content[data->map.p_y + 1][data->map.p_x] == 'C')
 			data->map.collected += 1;
+		if (data->map.content[data->map.p_y + 1][data->map.p_x] == 'E' &&
+			data->map.collected == data->map.collectable)
+			data->map.player_escape = TRUE;
 		previous_tile_space(data, &coord);
 		data->map.content[data->map.p_y + 1][data->map.p_x] = 'P';
 		calc_coord(data->map.p_x, data->map.p_y + 1, &coord);
@@ -60,10 +66,13 @@ void	move_left(t_mlx *data)
 {
 	t_coord	coord;
 
-	if (move_is_valid(data, data->map.p_x - 1, data->map.p_y) != -1)
+	if (move_is_valid(data, data->map.p_x - 1, data->map.p_y) != ERROR)
 	{
 		if (data->map.content[data->map.p_y][data->map.p_x - 1] == 'C')
 			data->map.collected += 1;
+		if (data->map.content[data->map.p_y][data->map.p_x - 1] == 'E' &&
+			data->map.collected == data->map.collectable)
+			data->map.player_escape = TRUE;
 		previous_tile_space(data, &coord);
 		data->map.content[data->map.p_y][data->map.p_x - 1] = 'P';
 		calc_coord(data->map.p_x - 1, data->map.p_y, &coord);
@@ -82,10 +91,13 @@ void	move_right(t_mlx *data)
 {
 	t_coord	coord;
 
-	if (move_is_valid(data, data->map.p_x + 1, data->map.p_y) != -1)
+	if (move_is_valid(data, data->map.p_x + 1, data->map.p_y) != ERROR)
 	{
 		if (data->map.content[data->map.p_y][data->map.p_x + 1] == 'C')
 			data->map.collected += 1;
+		if (data->map.content[data->map.p_y][data->map.p_x + 1] == 'E' &&
+			data->map.collected == data->map.collectable)
+			data->map.player_escape = TRUE;
 		previous_tile_space(data, &coord);
 		data->map.content[data->map.p_y][data->map.p_x + 1] = 'P';
 		calc_coord(data->map.p_x + 1, data->map.p_y, &coord);
@@ -102,16 +114,13 @@ void	move_right(t_mlx *data)
 
 void	move(t_mlx *data, int key)
 {
-	if (key == XK_Up)
+	if (key == 13)
 		move_up(data);
-	else if (key == XK_Down)
+	else if (key == 1)
 		move_down(data);
-	else if (key == XK_Left)
+	else if (key == 0)
 		move_left(data);
-	else if (key == XK_Right)
+	else if (key == 2)
 		move_right(data);
-	printf("x: %d - y: %d\n""collecables: %d\ncollected: %d\nNum of steps: %d\n",
-		data->map.p_x, data->map.p_y, data->map.collectable,
-		data->map.collected, data->map.steps);
 	print_map(data);
 }

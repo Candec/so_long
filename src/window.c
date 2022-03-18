@@ -6,7 +6,7 @@
 /*   By: jibanez- <jibanez-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 13:00:01 by jibanez-          #+#    #+#             */
-/*   Updated: 2021/10/18 18:31:34 by jibanez-         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:54:03 by jibanez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,17 @@
 
 int	handle_keypress(int keysym, t_mlx *data)
 {
-	if (keysym == XK_Escape)
+	if (keysym == 53)
 		exit_hook(data);
-	else if (data->map.player_escape == TRUE)
+	if (data->map.player_escape == TRUE)
 		return (0);
-	else if (keysym == XK_Up || keysym == XK_Down
-		|| keysym == XK_Left || keysym == XK_Right)
-	{
+	else if (keysym == 13 || keysym == 1
+		|| keysym == 2 || keysym == 0)
 		move(data, keysym);
-	}
 	return (0);
 }
 
-int	draw_first_map(t_mlx *data)
+void	draw_first_map(t_mlx *data)
 {
 	int		column;
 	int		row;
@@ -34,10 +32,10 @@ int	draw_first_map(t_mlx *data)
 	t_coord	coord;
 
 	row = -1;
-	while (++row <= data->map.height)
+	while (++row < data->map.height)
 	{
 		column = -1;
-		while (++column <= data->map.width)
+		while (++column < data->map.width)
 		{
 			calc_coord(column, row, &coord);
 			if (data->map.content[row][column] == '1')
@@ -78,9 +76,9 @@ int	init_game(t_mlx *data)
 		handle_error(data, "COULDN'T FIND SCREEN\n", TRUE);
 	if (load_textures(data) == ERROR)
 		handle_error(data, "ERROR LOADING THE IMGs\n", TRUE);
-	if (draw_first_map(data) == ERROR)
-		handle_error(data, "ERROR CREATING FIRST MAP\n", TRUE);
-	mlx_hook(data->win_ptr, KeyPress, KeyPressMask, &handle_keypress, data);
+	draw_first_map(data);
+	mlx_hook(data->win_ptr, 02, 1L << 2, &handle_keypress, data);
+	mlx_hook(data->win_ptr, 17, (1L << 17), &exit_hook, data);
 	mlx_loop(data->mlx_ptr);
 	return (0);
 }

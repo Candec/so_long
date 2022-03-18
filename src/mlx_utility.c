@@ -6,7 +6,7 @@
 /*   By: jibanez- <jibanez-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 13:03:44 by jibanez-          #+#    #+#             */
-/*   Updated: 2021/10/18 18:10:02 by jibanez-         ###   ########.fr       */
+/*   Updated: 2021/10/20 17:40:55 by jibanez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	render_asset(t_mlx *data, void *img_ptr, int x, int y)
 void	win_size(t_mlx *data)
 {
 	data->win_width = ASSET_SIZE * data->map.width;
-	data->win_height = ASSET_SIZE * (1 + data->map.height);
+	data->win_height = ASSET_SIZE * data->map.height;
 }
 
 int	move_is_valid(t_mlx *data, int x, int y)
@@ -36,9 +36,8 @@ int	move_is_valid(t_mlx *data, int x, int y)
 	else if (data->map.content[y][x] == 'E'
 		&& data->map.collectable != data->map.collected)
 		return (ERROR);
-	else if (data->map.content[y][x] == 'E' 
-		&& data->map.collectable == data->map.collected)
-		data->map.player_escape == TRUE;
+	else if (data->map.player_escape == TRUE)
+		return (ERROR);
 	return (0);
 }
 
